@@ -10,13 +10,14 @@ token = 'xgj69AIyrnS8WaxPCBdujP10bmld9Yfb'
 
 @app.route('/upload_image', methods=['POST'])
 def upload_image():
-    files = {'smfile': request.files.get('imgup')}
+    files = {'smfile': request.files.get('img_file')}
     headers = {'Authorization': token}
     res = requests.post(base_url + 'upload', files=files, headers=headers).json()
 
     if res['success']:
-        return res['data']['url']
-    return 'upload failed'
+        return res['data']['url'], 200
+    print(res)
+    return 'upload failed', 400
 
 
 @app.route('/')

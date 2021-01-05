@@ -73,7 +73,7 @@
               <div class="image-container" v-if="image">
                 <img :src="image">
                   <i class="fas fa-times-circle"
-                     @click="image = ''">
+                    @click="image = '';img_file = ''">
                   </i>
                 </img>
               </div>
@@ -101,7 +101,7 @@
                 <i class="fas fa-image fa-lg"></i>
               </label>
             </div>
-            <p class="helper-text">Click <a @click="uploadRandomImage">here for a random image!</a> or upload your own! <i class="fas fa-chevron-right"></i></p>
+            <p class="helper-text">Click <a @click="">here for a random image!</a> or upload your own! <i class="fas fa-chevron-right"></i></p>
           </div>
         </div>
         </div>
@@ -112,6 +112,7 @@
 <script src="https://cpwebassets.codepen.io/assets/common/stopExecutionOnTimeout-157cd5b220a5c80d4ff8e0e70ac069bffd87a61252088146915e8726e5d9f147.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue@2.5.13"></script>
 <script src='https://unpkg.com/vue-dragscroll@1.3.1/dist/vue-dragscroll.min.js'></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
 <script src="tweet.js"></script>
 

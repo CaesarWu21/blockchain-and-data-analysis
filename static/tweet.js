@@ -141,7 +141,7 @@ new Vue({
     fileUpload(e) {
       const files = e.target.files || e.dataTransfer.files;
       if (!files.length) return;
-      this.image = files[0];
+      this.img_file = files[0];
       this.createImage();
     },
     createImage() {
@@ -152,24 +152,11 @@ new Vue({
         this.image = e.target.result;
         this.step = 2;
       };
-      reader.readAsDataURL(this.image);
-    },
-    uploadRandomImage() {
-      const randomImages = [
-      'https://s3-us-west-2.amazonaws.com/s.cdpn.io/1211695/twitter_mobile.png',
-      'https://s3-us-west-2.amazonaws.com/s.cdpn.io/1211695/cn-tower.jpg',
-      'https://s3-us-west-2.amazonaws.com/s.cdpn.io/1211695/prism-goggles-at-concert.jpg',
-      'https://s3-us-west-2.amazonaws.com/s.cdpn.io/1211695/working-at-night.jpg',
-      'https://s3-us-west-2.amazonaws.com/s.cdpn.io/1211695/busy-beach.jpg',
-      'https://s3-us-west-2.amazonaws.com/s.cdpn.io/1211695/grand-canyon.jpg',
-      'https://s3-us-west-2.amazonaws.com/s.cdpn.io/1211695/carnival-lights-at-dusk.jpg'];
-
-
-      this.image = randomImages[Math.floor(Math.random() * randomImages.length)];
-      this.step = 2;
+      reader.readAsDataURL(this.img_file);
     },
     goToHome() {
       this.image = '';
+      this.img_file = ''
       this.description = '';
       this.step = 1;
 
@@ -179,21 +166,35 @@ new Vue({
       });
     },
     shareTweet() {
-      // Upload to 七牛云
+      vue = this
 
+      // Upload to Flask
+      let param = new FormData()
+      param.append('img_file', this.img_file, this.img_file.name);
 
-      const tweet = {  
-        name: 'CodePen.IO',
-        userImage: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/1211695/codepen_logo.png',
-        handle: '@CodePen',
-        timeLapsed: '1m',
-        tweetImage: this.image,
-        description: this.description,
-        likes: 0,
-        upVoted: false };
-      
-      // Upload to ETH
-
-      this.tweets.unshift(tweet);
-      this.goToHome();
-    } } });
+      axios.post('/upload_image', param, {
+        headers:{'Content-Type':'multipart/form-data'}
+      },)
+      .then(function (response) {
+        console.log(response);
+        let img_url = response.data
+        // Upload to ETH
+        // TODO
+        
+        let tweet = {  
+          name: 'CodePen.IO',
+          userImage: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/1211695/drizzy_twitter.png',
+          handle: '@CodePen',
+          timeLapsed: '1m',
+          tweetImage: vue.image,
+          description: vue.description,
+          likes: 0,
+          upVoted: false };
+        
+        vue.tweets.unshift(tweet);
+        vue.goToHome();
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    }}});
